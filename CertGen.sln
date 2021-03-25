@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31112.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CertGen", "CertGen.csproj", "{5EE121DC-1A92-4603-B5EF-D538419BD4BB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5EE121DC-1A92-4603-B5EF-D538419BD4BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EE121DC-1A92-4603-B5EF-D538419BD4BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EE121DC-1A92-4603-B5EF-D538419BD4BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EE121DC-1A92-4603-B5EF-D538419BD4BB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {52A5F892-897E-4A74-9488-AC0D13E33AB6}
+	EndGlobalSection
+EndGlobal
