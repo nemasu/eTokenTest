@@ -33,59 +33,33 @@ namespace CreateSimpleCertRequest
     {
         static void Main()
         {
-            //  Create all the objects that will be required
-            CX509CertificateRequestPkcs10 p10 = new CX509CertificateRequestPkcs10();
+            CX509Enrollment enroll = new CX509Enrollment();
             CX509PrivateKey pri = new CX509PrivateKey();
-            CCspInformation csp = new CCspInformation();
-            CCspInformations csps = new CCspInformations();
+            CX509CertificateRequestPkcs10 request = new CX509CertificateRequestPkcs10();
             CX500DistinguishedName dn = new CX500DistinguishedName();
 
-            string base64p10;
-
-            //  Initialize the csp object using the desired Cryptograhic Service Provider (CSP)
-            csp.InitializeFromName("eToken Base Cryptograhic Provider");
-
-            //  Add this CSP object to the CSP collection object
-            csps.Add(csp);
-
-            //  Provide key container name, key length and key spec to the private key object
-            pri.ContainerName = "RSA";
+            pri.ProviderName = "eToken Base Cryptographic Provider";
             pri.Length = 2048;
             pri.KeySpec = X509KeySpec.XCN_AT_KEYEXCHANGE;
+            
+            //pri.KeyUsage = X509PrivateKeyUsageFlags.XCN_NCRYPT_ALLOW_DECRYPT_FLAG;
 
-            //  Provide the CSP collection object (in this case containing only 1 CSP object)
-            //  to the private key object
-            pri.CspInformations = csps;
+            pri.ProviderType = X509ProviderType.XCN_PROV_RSA_FULL;
+            pri.ExportPolicy = X509PrivateKeyExportFlags.XCN_NCRYPT_ALLOW_EXPORT_NONE;
 
-            //  Create the actual key pair
-            pri.Create();
+            request.InitializeFromPrivateKey(X509CertificateEnrollmentContext.ContextUser,pri,"");
+            dn.Encode("CN=KimiNoNaWa", X500NameFlags.XCN_CERT_NAME_STR_DISABLE_UTF8_DIR_STR_FLAG);
+            request.Subject = dn;
 
-            //  Encode the name in using the Distinguished Name object
-            dn.Encode("CN=KimiNoNaWa", X500NameFlags.XCN_CERT_NAME_STR_NONE);
+            enroll.InitializeFromRequest(request);
+            string pkcs10 = enroll.CreateRequest(EncodingType.XCN_CRYPT_STRING_BASE64);
 
-            //  Initialize the PKCS#10 certificate request object based on the private key.
-            //  Using the context, indicate that this is a user certificate request and don't
-            //  provide a template name
-            p10.InitializeFromPrivateKey(X509CertificateEnrollmentContext.ContextUser, pri, "");
+            Console.WriteLine(pkcs10);
 
-            //  The newly created certificate request object will contain some default extensions.
-            //  Suppress these defaults by setting the SuppressDefaults flag
-            p10.SuppressDefaults = true;
-
-            //  Assing the subject name by using the Distinguished Name object initialized above
-            p10.Subject = dn;
-
-            //  Encode the certificate request
-            p10.Encode();
-
-            //  Get the certificate request in form of a base 64 encoded string
-            base64p10 = p10.get_RawData(EncodingType.XCN_CRYPT_STRING_BASE64);
-
-            //  print the certificate request on the console
-            Console.Write(base64p10);
-            Console.ReadKey();
-
-            return;
+            //Do Enrollment
+            
+            //Install certificate
+            //enroll.InstallResponse(InstallResponseRestrictionFlags.AllowUntrustedRoot, pkcs10, EncodingType.XCN_CRYPT_STRING_BASE64REQUESTHEADER, "");
         }
     }
 }
